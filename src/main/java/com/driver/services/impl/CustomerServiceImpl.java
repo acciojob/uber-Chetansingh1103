@@ -85,6 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if(!tripBookingRepository2.findById(tripId).isPresent()){
 			throw new NullPointerException();
 		}
+
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 
 		tripBooking.setStatus(TripStatus.CANCELED);
@@ -93,7 +94,8 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.getDriver().getTripBookingList().remove(tripBooking);
 		tripBooking.getCustomer().getTripBookingList().remove(tripBooking);
 
-		tripBookingRepository2.delete(tripBooking);
+		tripBookingRepository2.save(tripBooking);
+
 	}
 
 	@Override
