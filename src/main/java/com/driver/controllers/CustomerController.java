@@ -33,12 +33,22 @@ public class CustomerController {
 	}
 
 	@DeleteMapping("/complete")
-	public void completeTrip(@RequestParam Integer tripId){
-		customerService.completeTrip(tripId);
+	public void completeTrip(@RequestParam Integer tripId) throws NullPointerException{
+		try {
+			customerService.completeTrip(tripId);
+		}
+		catch (NullPointerException e){
+			e.getMessage();
+		}
 	}
 
 	@DeleteMapping("/cancelTrip")
 	public void cancelTrip(@RequestParam Integer tripId){
-		customerService.cancelTrip(tripId);
+		try {
+			customerService.cancelTrip(tripId);
+		}
+		catch (NullPointerException e){
+			e.getMessage();
+		}
 	}
 }

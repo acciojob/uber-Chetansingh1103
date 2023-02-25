@@ -43,14 +43,12 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public void updateStatus(int driverId){
+	public void updateStatus(int driverId) throws NullPointerException{
 		//Set the status of respective car to unavailable
 		Driver driver = driverRepository3.findById(driverId).get();
-		Cab cab = cabRepository3.findById(driver.getCab().getId()).get();
+		driver.getCab().setAvailable(false);
 
-		cab.setAvailable(false);
-
-		cabRepository3.save(cab);
+		driverRepository3.save(driver);
 
 	}
 }

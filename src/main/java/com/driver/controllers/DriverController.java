@@ -26,7 +26,12 @@ public class DriverController {
 	}
 
 	@PutMapping("/status")
-	public void updateStatus(@RequestParam Integer driverId){
-		driverService.updateStatus(driverId);
+	public void updateStatus(@RequestParam Integer driverId) throws NullPointerException{
+		try{
+			driverService.updateStatus(driverId);
+		}
+		catch (NullPointerException e){
+			e.getMessage();
+		}
 	}
 }
