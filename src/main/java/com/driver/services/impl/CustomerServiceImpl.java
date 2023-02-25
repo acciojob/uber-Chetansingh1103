@@ -66,11 +66,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 				tripBooking.setCustomer(customer);
 
-				driver.getTripBookingList().add(tripBooking);
+
 				tripBooking.setDriver(driver);
 
 				customerRepository2.save(customer);
 				driverRepository2.save(driver);
+				customer.getTripBookingList().add(tripBooking);
+				driver.getTripBookingList().add(tripBooking);
 				return tripBooking;
 			}
 		}
@@ -107,6 +109,10 @@ public class CustomerServiceImpl implements CustomerService {
 		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);
 		if(tripBooking.getStatus().equals(TripStatus.CONFIRMED)){
 
+			if(tripBooking.getCustomer() == null){
+				throw new NullPointerException();
+			}
+
 			Customer customer = tripBooking.getCustomer();
 			Driver driver = tripBooking.getDriver();
 
@@ -115,6 +121,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 			driverRepository2.save(driver);
 			customerRepository2.save(customer);
+
 		}
 	}
 }

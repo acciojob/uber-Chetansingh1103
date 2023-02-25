@@ -33,7 +33,7 @@ public class CustomerController {
 	}
 
 	@DeleteMapping("/complete")
-	public void completeTrip(@RequestParam Integer tripId) throws NullPointerException{
+	public void completeTrip(@RequestParam Integer tripId){
 		try {
 			customerService.completeTrip(tripId);
 		}
