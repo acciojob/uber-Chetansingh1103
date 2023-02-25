@@ -58,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
 				int bill = rate * tripBooking.getDistanceInKm();
 				tripBooking.setBill(bill);
 
-				if(customerRepository2.findCustomerById(customerId) == null){
+				if(!customerRepository2.findById(customerId).isPresent()){
 					throw new NullPointerException();
 				}
 
@@ -80,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public void cancelTrip(Integer tripId) throws NullPointerException{
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
-		if(tripBookingRepository2.findTripBookingById(tripId) == null){
+		if(!tripBookingRepository2.findById(tripId).isPresent()){
 			throw new NullPointerException();
 		}
 		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);
@@ -101,7 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId) throws NullPointerException{
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 
-		if(tripBookingRepository2.findTripBookingById(tripId) == null){
+		if(!tripBookingRepository2.findById(tripId).isPresent()){
 			throw new NullPointerException();
 		}
 		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);

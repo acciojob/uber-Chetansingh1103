@@ -32,7 +32,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin updatePassword(Integer adminId, String password) {
+	public Admin updatePassword(Integer adminId, String password) throws NullPointerException{
 		//Update the password of admin with given id
 		Admin admin = adminRepository1.findById(adminId).get();
 		admin.setPassword(password);
