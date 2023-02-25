@@ -47,18 +47,24 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setFromLocation(fromLocation);
 		tripBooking.setToLocation(toLocation);
 		tripBooking.setDistanceInKm(distanceInKm);
-		tripBooking.setCustomer(customerRepository2.findById(customerId).get());
+
 
 		for(Driver driver : driverRepository2.findAll()){
 			if(driver.getCab().getAvailable()){
 				tripBooking.setDriver(driver);
+
 				tripBooking.setStatus(TripStatus.CONFIRMED);
 
 				int rate = driver.getCab().getPerKmRate();
 				int bill = rate * tripBooking.getDistanceInKm();
 				tripBooking.setBill(bill);
 
-				tripBookingRepository2.save(tripBooking);
+				Customer customer = customerRepository2.findCustomerById(customerId);
+				tripBooking.setCustomer(customer);
+				driver.getTripBookingList().add(tripBooking);
+				customer.getTripBookingList().add(tripBooking);
+				customerRepository2.save(customer);
+				driverRepository2.save(driver);
 				return tripBooking;
 			}
 		}
@@ -70,7 +76,16 @@ public class CustomerServiceImpl implements CustomerService {
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 		tripBooking.setStatus(TripStatus.CANCELED);
-		tripBookingRepository2.save(tripBooking);
+
+		Driver driver = tripBooking.getDriver();
+		Customer customer = tripBooking.getCustomer();
+
+		driver.getTripBookingList().remove(tripBooking);
+		customer.getTripBookingList().remove(tripBooking);
+
+		tripBookingRepository2.delete(tripBooking);
+		driverRepository2.save(driver);
+		customerRepository2.save(customer);
 	}
 
 	@Override
@@ -82,11 +97,8 @@ public class CustomerServiceImpl implements CustomerService {
 			Customer customer = tripBooking.getCustomer();
 			Driver driver = tripBooking.getDriver();
 
-			driver.getTripBookingList().add(tripBooking);
-			customer.getTripBookingList().add(tripBooking);
 
 			tripBooking.setStatus(TripStatus.COMPLETED);
-
 
 			driverRepository2.save(driver);
 			customerRepository2.save(customer);
