@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 					throw new NullPointerException();
 				}
 
-				Customer customer = customerRepository2.findCustomerById(customerId);
+				Customer customer = customerRepository2.findById(customerId).get();
 
 				tripBooking.setCustomer(customer);
 
@@ -71,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 				customerRepository2.save(customer);
 				driverRepository2.save(driver);
-				customer.getTripBookingList().add(tripBooking);
+
 				driver.getTripBookingList().add(tripBooking);
 				return tripBooking;
 			}
@@ -85,7 +85,8 @@ public class CustomerServiceImpl implements CustomerService {
 		if(!tripBookingRepository2.findById(tripId).isPresent()){
 			throw new NullPointerException();
 		}
-		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);
+		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
+
 		tripBooking.setStatus(TripStatus.CANCELED);
 
 		Driver driver = tripBooking.getDriver();
@@ -106,7 +107,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if(!tripBookingRepository2.findById(tripId).isPresent()){
 			throw new NullPointerException();
 		}
-		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);
+		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 		if(tripBooking.getStatus().equals(TripStatus.CONFIRMED)){
 
 			if(tripBooking.getCustomer() == null){
