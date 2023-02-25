@@ -50,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setCustomer(customerRepository2.findById(customerId).get());
 
 		for(Driver driver : driverRepository2.findAll()){
-			if(driver.getCab().isAvailable()){
+			if(driver.getCab().getAvailable()){
 				tripBooking.setDriver(driver);
 				tripBooking.setStatus(TripStatus.CONFIRMED);
 
