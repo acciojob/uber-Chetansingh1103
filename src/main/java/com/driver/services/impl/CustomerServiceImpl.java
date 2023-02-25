@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public TripBooking bookTrip(int customerId, String fromLocation, String toLocation, int distanceInKm) throws Exception{
+	public TripBooking bookTrip(int customerId, String fromLocation, String toLocation, int distanceInKm) throws Exception,NullPointerException{
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
 		TripBooking tripBooking = new TripBooking();
@@ -58,8 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
 				int bill = rate * tripBooking.getDistanceInKm();
 				tripBooking.setBill(bill);
 
+				if(customerRepository2.findCustomerById(customerId) == null){
+					throw new NullPointerException();
+				}
+
 				Customer customer = customerRepository2.findCustomerById(customerId);
-				customer.getTripBookingList().add(tripBooking);
+
 				tripBooking.setCustomer(customer);
 
 				driver.getTripBookingList().add(tripBooking);
@@ -76,6 +80,9 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public void cancelTrip(Integer tripId) throws NullPointerException{
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
+		if(tripBookingRepository2.findTripBookingById(tripId) == null){
+			throw new NullPointerException();
+		}
 		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);
 		tripBooking.setStatus(TripStatus.CANCELED);
 
@@ -94,6 +101,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId) throws NullPointerException{
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 
+		if(tripBookingRepository2.findTripBookingById(tripId) == null){
+			throw new NullPointerException();
+		}
 		TripBooking tripBooking = tripBookingRepository2.findTripBookingById(tripId);
 		if(tripBooking.getStatus().equals(TripStatus.CONFIRMED)){
 
